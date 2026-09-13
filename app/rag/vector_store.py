@@ -12,19 +12,31 @@ collection = client.get_or_create_collection(
 )
 
 
-def add_documents(chunks, embeddings):
+def add_documents(chunks, embeddings, document_id, filename):
 
-    ids = [f"chunk_{i}" for i in range(len(chunks))]
+    # Remove older chunks belonging to this document.
+    collection.delete(
+        where={
+            "document_id": document_id
+        }
+    )
 
-    documents = [
-        chunk.page_content
-        for chunk in chunks
-    ]
+    ids = []
+    documents = []
+    metadatas = []
 
-    metadatas = [
-        chunk.metadata
-        for chunk in chunks
-    ]
+    for i, chunk in enumerate(chunks):
+
+        chunk_id = f"{document_id}_chunk_{i}"
+
+        metadata = chunk.metadata.copy()
+
+        metadata["document_id"] = document_id
+        metadata["filename"] = filename
+
+        ids.append(chunk_id)
+        documents.append(chunk.page_content)
+        metadatas.append(metadata)
 
     collection.add(
         ids=ids,

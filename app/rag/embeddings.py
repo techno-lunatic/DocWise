@@ -1,10 +1,6 @@
-# Generates embeddings 
-
 from sentence_transformers import SentenceTransformer
-# loads and runs embedding models
 
 from app.config import EMBEDDING_MODEL
-# the actual trained embedding model
 
 
 model = SentenceTransformer(EMBEDDING_MODEL)
@@ -25,6 +21,7 @@ def embed_query(query):
 
     embedding = model.encode(
         query,
+        prompt_name="query",
         normalize_embeddings=True
     )
 
