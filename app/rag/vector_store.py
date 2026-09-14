@@ -14,11 +14,9 @@ collection = client.get_or_create_collection(
 
 def add_documents(chunks, embeddings, document_id, filename):
 
-    # Remove older chunks belonging to this document.
+    # Remove old chunks belonging to the same filename
     collection.delete(
-        where={
-            "document_id": document_id
-        }
+        where={"filename": filename}
     )
 
     ids = []

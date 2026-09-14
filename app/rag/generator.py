@@ -17,4 +17,9 @@ def generate_answer(prompt):
         stream=True
     )
 
-    return response["message"]["content"]
+    for chunk in response:
+
+        content = chunk["message"]["content"]
+
+        if content:
+            yield content
