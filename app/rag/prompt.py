@@ -4,7 +4,7 @@ def build_prompt(context, question):
 You are a document analysis assistant.
 
 Answer the user's question using only the information
-provided in the document context.
+provided in the document context, in detail
 
 Use the source and page information when relevant.
 

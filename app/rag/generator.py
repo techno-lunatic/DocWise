@@ -22,4 +22,4 @@ def generate_answer(prompt):
         content = chunk["message"]["content"]
 
         if content:
-            yield content
+            yield content # useful for stream (continious printing of output)

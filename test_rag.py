@@ -29,9 +29,7 @@ if not pdf_files:
 # print(f"Found {len(pdf_files)} PDF(s).")
 
 
-# ==========================================
 # INDEX EACH PDF
-# ==========================================
 
 for pdf_path in pdf_files:
 
@@ -79,9 +77,7 @@ for pdf_path in pdf_files:
     # print("Indexing complete!")
 
 
-# ==========================================
-# CONVERSATION
-# ==========================================
+# LLM CONVERSATION
 
 messages = []
 
@@ -93,19 +89,15 @@ while True:
     query = input("\nUser: ")
 
 
-    # --------------------------------------
     # EXIT
-    # --------------------------------------
 
-    if query.lower().strip() == "exit":
+    # if query.lower().strip() == "exit":
 
-        print("Goodbye!")
-        break
+    #     print("Goodbye!")
+    #     break
 
 
-    # --------------------------------------
     # CLEAR CONVERSATION
-    # --------------------------------------
 
     if query.lower().strip() == "clear":
 
@@ -116,21 +108,17 @@ while True:
         continue
 
 
-    # ==========================================
     # QUERY REWRITING
-    # ==========================================
 
     search_query = rewrite_query(
         query,
         messages
     )
 
-    print(f"\nSearch query: {search_query}")
+    # print(f"\nSearch query: {search_query}")
 
 
-    # ==========================================
     # RETRIEVAL
-    # ==========================================
 
     results = retrieve(search_query)
 
@@ -138,12 +126,9 @@ while True:
     retrieved_metadatas = results["metadatas"][0]
 
 
-    # ==========================================
-    # BUILD CONTEXT
-    # ==========================================
+    # CONTEXT BUILDING
 
     context_parts = []
-
 
     for document, metadata in zip(
         retrieved_documents,
@@ -175,9 +160,7 @@ while True:
     context = "\n\n".join(context_parts)
 
 
-    # ==========================================
     # GENERATE ANSWER
-    # ==========================================
 
     prompt = build_prompt(
         context,
@@ -189,17 +172,13 @@ while True:
     print(f"Answered in {time.perf_counter()-curr}s")
 
 
-    # ==========================================
     # DISPLAY ANSWER
-    # ==========================================
 
-    print("\n===== ANSWER =====")
+    # print("\n===== ANSWER =====")
     print(answer, flush=True)
 
 
-    # ==========================================
     # DISPLAY SOURCES
-    # ==========================================
 
     # print("\n===== SOURCES =====")
 
@@ -228,9 +207,7 @@ while True:
     #     )
 
 
-    # ==========================================
     # SAVE CONVERSATION
-    # ==========================================
 
     messages.append(
         {

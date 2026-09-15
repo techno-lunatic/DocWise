@@ -19,7 +19,7 @@ LLM_MODEL = "llama3.2:3b"
 EMBEDDING_MODEL = "Qwen/Qwen3-Embedding-0.6B" # make sure ots the same for indexing and querying
 
 
-# Parameter Tuning (change later if want to)
+# Parameter Tuning (can be modified later)
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 120
 TOP_K = 5

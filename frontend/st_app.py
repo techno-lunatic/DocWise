@@ -32,7 +32,7 @@ st.set_page_config(
 )
 
 
-st.title("📚 DocWise")
+st.title("DocWise")
 st.caption("Conversational analysis of text-based documents")
 
 

@@ -25,7 +25,7 @@ Conversation history:
 Latest question:
 {query}
 
-Return ONLY the rewritten search query.
+Return ONLY the rewritten search query, nothing else.
 """
 
     response = ollama.chat(

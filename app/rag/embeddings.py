@@ -1,11 +1,12 @@
 from sentence_transformers import SentenceTransformer
+# ST is a library that converts a text based sentence into embeddings
 
 from app.config import EMBEDDING_MODEL
 
 
 model = SentenceTransformer(EMBEDDING_MODEL)
 
-
+# Embeds the entire documents provided into embeddings
 def embed_documents(texts):
 
     embeddings = model.encode(
@@ -17,6 +18,7 @@ def embed_documents(texts):
     return embeddings.tolist()
 
 
+# Converts user query into embeddings
 def embed_query(query):
 
     embedding = model.encode(

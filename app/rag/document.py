@@ -1,5 +1,11 @@
-import hashlib
+# Generates a unique content-based ID for each PDF using SHA-256, (useful in chunking)
+# which is used to uniquely identify the document and its chunks in ChromaDB.
 
+# This is an optional part and can be skipped
+# Creates a content-based ID,
+# so the same document can always be uniquely identified, regardless of its filename or upload order.
+
+import hashlib
 
 def get_document_id(file_path):
 
