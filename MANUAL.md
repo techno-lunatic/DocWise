@@ -52,7 +52,7 @@ The model configured as `LLM_MODEL` in `app/config.py` must be installed.
 From the DocWise root folder:
 
 ```bash
-streamlit run frontend/st_app.py
+python -m streamlit run frontend/st_app.py
 ```
 
 The application will open in your browser.
