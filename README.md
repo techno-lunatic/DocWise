@@ -1,147 +1,152 @@
-# DocWise
+# DocWise — Local RAG Application
 
-DocWise is a conversational document analysis assistant built using Retrieval-Augmented Generation (RAG). It allows users to upload company FAQs, policies, and internal documents, then ask questions and receive answers grounded in the uploaded documents.
+DocWise is a locally running Retrieval-Augmented Generation (RAG) application that allows users to upload PDF documents and ask questions about their contents through a conversational interface. It uses semantic search to retrieve relevant document sections and a locally hosted LLM to generate responses.
 
 ## Features
 
-- PDF upload and indexing
-- Text extraction and chunking
-- Semantic embeddings using Sentence Transformers
-- Vector storage and similarity search with ChromaDB
-- Conversational query rewriting
-- Local LLM answer generation using Ollama
-- Streaming responses
-- Source document and page attribution
-- Duplicate filename detection with overwrite support
-- Multi-document retrieval
+- PDF upload and text extraction using PyPDFLoader.
+- Recursive text chunking with configurable overlap.
+- Semantic embeddings using Sentence Transformers.
+- Vector storage and retrieval using ChromaDB.
+- Top-5 relevant chunk retrieval.
+- Conversational query rewriting using chat history.
+- Local response generation using Ollama.
+- Streaming responses through Streamlit.
+- Source filename and page metadata display.
+- Duplicate filename detection and document replacement.
 
-## Architecture
+## Technology Stack
 
-```text
-PDF Documents
-     ↓
-PDF Loader
-     ↓
-Text Chunking
-     ↓
-Sentence Transformer Embeddings
-     ↓
-ChromaDB
-     ↓
-User Question
-     ↓
-Query Rewriting
-     ↓
-Query Embedding
-     ↓
-Top-K Retrieval
-     ↓
-Prompt + Retrieved Context
-     ↓
-Local Ollama LLM
-     ↓
-Streaming Answer + Sources
-```
+| Component | Technology |
+|---|---|
+| Language | Python |
+| Frontend | Streamlit |
+| PDF Processing | PyPDFLoader |
+| Text Chunking | RecursiveCharacterTextSplitter |
+| Embeddings | Qwen3-Embedding-0.6B |
+| Vector Database | ChromaDB |
+| LLM Runtime | Ollama |
+| Language Model | Llama 3.2 3B |
+| Framework Components | LangChain |
 
-Detailed diagrams are available in `docs/`.
+## RAG Pipeline
 
-## Tech Stack
+**Document Ingestion**
 
-- Python
-- Streamlit
-- LangChain Community
-- PyPDF
-- Recursive Character Text Splitter
-- Sentence Transformers
-- ChromaDB
-- Ollama
-- Local open-source LLM
+1. Upload PDF through Streamlit.
+2. Extract text and page metadata using PyPDFLoader.
+3. Split text into chunks using RecursiveCharacterTextSplitter.
+4. Generate embeddings using Sentence Transformers.
+5. Store embeddings and metadata in ChromaDB.
+
+**Question Answering**
+
+1. Accept a user query.
+2. Rewrite follow-up questions using conversation history.
+3. Generate query embeddings.
+4. Retrieve the five most relevant chunks from ChromaDB.
+5. Pass retrieved context to the local LLM through Ollama.
+6. Stream the generated response with source and page information.
+
+## Configuration
+
+| Parameter | Value |
+|---|---|
+| Chunk Size | 800 |
+| Chunk Overlap | 120 |
+| Retrieval Top-K | 5 |
+| Embedding Model | Qwen/Qwen3-Embedding-0.6B |
+| Embedding Normalization | Enabled |
+| LLM | llama3.2:3b |
+| Generation | Streaming |
 
 ## Project Structure
 
 ```text
 DocWise/
+│
 ├── app/
 │   ├── config.py
 │   └── rag/
 │       ├── loader.py
 │       ├── chunker.py
 │       ├── embeddings.py
-│       ├── vector_store.py
 │       ├── retriever.py
 │       ├── query_rewriter.py
 │       ├── prompt.py
 │       ├── generator.py
+│       ├── vector_store.py
 │       └── document.py
-├── data/
-│   ├── uploads/
-│   └── chroma_db/
-├── demo/
-│   ├── files/
-│   ├── images/
-│   └── video/
-├── docs/
-│   ├── process_flow.png
-│   ├── architecture.png
-│   └── rag_pipeline.png
+│
 ├── frontend/
 │   └── st_app.py
-├── tests/
-├── test_rag.py
+│
+├── demo/
+│   ├── files/
+│   ├── Images/
+│   └── Video/
+│
 ├── requirements.txt
-└── README.md
+├── README.md
+└── MANUAL.md
 ```
 
-## How It Works
+## Installation and Setup
 
-### Document Indexing
+**1. Clone the repository**
 
-1. PDF is uploaded and saved locally.
-2. Text is extracted using `PyPDFLoader`.
-3. Text is split into smaller chunks.
-4. Each chunk is converted into an embedding.
-5. Chunks, embeddings, and metadata are stored in ChromaDB.
-
-### Question Answering
-
-1. The latest question is rewritten using conversation history when required.
-2. The query is converted into an embedding.
-3. ChromaDB retrieves the most relevant chunks.
-4. Retrieved chunks are added to the prompt.
-5. The local Ollama LLM generates the answer.
-6. The answer is streamed to the interface.
-7. Sources and page numbers are displayed.
-
-## Demo Documents
-
-Sample company-policy-style PDFs are available in:
-
-```text
-demo/files/
+```bash
+git clone https://github.com/techno-lunatic/DocWise.git
+cd DocWise
 ```
 
-They can be uploaded directly for demonstrating indexing, multi-document retrieval, conversational questions, and source attribution.
+**2. Create and activate a virtual environment**
 
-## Limitations
+```bash
+python -m venv docwise_venv
 
-DocWise V1 is optimized for text-dominant, digitally generated PDFs.
+# Git Bash (Windows)
+source docwise_venv/Scripts/activate
+```
 
-It does not currently focus on:
+**3. Install dependencies**
 
-- Scanned or image-only PDFs
-- Handwritten documents
-- Advanced image understanding
-- Complex visual layouts
-- Advanced interpretation of diagrams or mathematical notation
+```bash
+pip install -r requirements.txt
+```
 
-## Future Improvements
+**4. Install Ollama and download the language model**
 
-- Hybrid semantic + keyword retrieval
-- Better handling of exact policy/FAQ questions
-- Query routing for non-document questions
-- Conversation summarization for very long chats
-- Advanced document versioning
+Download Ollama from https://ollama.com/
 
-## Author
+```bash
+ollama pull llama3.2:3b
+```
 
-Aaditya Gangurde
+**5. Run the application**
+
+```bash
+streamlit run frontend/st_app.py
+```
+
+Open the local URL displayed in the terminal.
+
+The embedding model `Qwen/Qwen3-Embedding-0.6B` is loaded through Sentence Transformers and may be downloaded during its first initialization.
+
+## Usage
+
+1. Upload a PDF document.
+2. Wait for document processing and indexing.
+3. Enter a question related to the uploaded document.
+4. View the generated response and its source information.
+5. Ask follow-up questions using the conversation interface.
+
+If a document with the same filename already exists, the application provides an overwrite option to replace its previously indexed chunks.
+
+## References
+
+- [Ollama](https://ollama.com/)
+- [Sentence Transformers](https://www.sbert.net/)
+- [ChromaDB](https://docs.trychroma.com/)
+- [Streamlit](https://docs.streamlit.io/)
+- [LangChain](https://python.langchain.com/)
