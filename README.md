@@ -83,8 +83,7 @@ DocWise/
 │
 ├── demo/
 │   ├── files/
-│   ├── Images/
-│   └── Video/
+│   └── Image/
 │
 ├── requirements.txt
 ├── README.md
